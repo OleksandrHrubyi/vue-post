@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import Home from "./views/Home.vue";
-
 Vue.use(Router);
 
 export default new Router({
@@ -10,11 +8,11 @@ export default new Router({
   routes: [
     {
       path: "/",
-      component: Home,
+      component: () => import("./components/Posts.vue"),
     },
     {
       path: "/add",
-      component: () => import("./views/NewPost.vue"),
+      component: () => import("./components/AddPost.vue"),
     },
     {
       path: "/users",

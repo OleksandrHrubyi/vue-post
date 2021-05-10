@@ -7,11 +7,20 @@
 
 <script>
 import Header from "./components/Header.vue";
-
+import { mapActions } from "vuex";
 export default {
   name: "App",
+
   components: {
     Header,
+  },
+
+  methods: {
+    ...mapActions(["getAll"]),
+  },
+
+  mounted() {
+    this.getAll();
   },
 };
 </script>

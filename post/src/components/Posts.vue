@@ -1,5 +1,5 @@
 <template>
-  <div class="main" id="posts">
+  <div class="main">
     <ul class="main-list">
       <li class="main-item" v-for="post in validPost" :key="post.id">
         <router-link class="main-link" :to="`${post.id}`"
@@ -7,32 +7,43 @@
         >
       </li>
     </ul>
-    <button class="main-btn" v-on:click="onLoad" type="button">
+    <button v-if="button" class="main-btn" v-on:click="onLoad" type="button">
       Load more
     </button>
+    <div class="observ"><inter-observer @intersect="onLoad" /></div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import InterObserver from "./Observer.vue";
+
 export default {
   data() {
     return {
-      pagination: 10,
+      page:
+        this.$store.state.post.page === null ? 1 : this.$store.state.post.page,
+      button: true,
+      observer: null,
     };
   },
 
-  name: "list",
+  components: { InterObserver },
+
   computed: mapGetters(["validPost"]),
+
   methods: {
     ...mapActions(["getAll"]),
-    onLoad() {
-      this.getAll((this.pagination += 10));
-    },
-  },
 
-  mounted() {
-    this.getAll(this.pagination);
+    onLoad() {
+      if (this.page >= 10) {
+        this.button = false;
+        return;
+      }
+
+      this.getAll((this.page += 1));
+      this.$store.state.post.page = this.page;
+    },
   },
 };
 </script>
@@ -82,10 +93,19 @@ export default {
     outline: none;
     background: rgba(48, 57, 65, 0.952);
     color: #fff;
+    @media screen and(max-width: 480px) {
+      display: none;
+    }
 
     &:hover {
       transition: 0.2s;
       background: rgba(105, 124, 139, 0.952);
+    }
+  }
+
+  .observ {
+    @media screen and(min-width: 480px) {
+      display: none;
     }
   }
 }

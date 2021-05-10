@@ -1,12 +1,12 @@
 <template>
   <div class="postinfo" id="postsInfo">
-    <h2>{{ getOnePost.title }}</h2>
-    <p>{{ getOnePost.body }}</p>
+    <h2 class="postinfo-title">{{ getOnePost.title }}</h2>
+    <p class="postinfo-title">{{ getOnePost.body }}</p>
     <button class="postinfo-btn" v-on:click="onClick">Show comments</button>
     <ul class="postinfo-list" v-if="this.comments">
       <li class="postinfo-item" v-for="post in getComments" :key="post.id">
-        <h3>{{ post.name }}</h3>
-        <p>{{ post.body }}</p>
+        <h3 class="postinfo-title">{{ post.name }}</h3>
+        <p class="postinfo-title">{{ post.body }}</p>
         <a :href="`mailto:${post.email}`">{{ post.email }}</a>
       </li>
     </ul>
@@ -22,7 +22,9 @@ export default {
       comments: false,
     };
   },
+
   computed: mapGetters(["getComments", "getOnePost"]),
+
   methods: {
     ...mapActions(["getInfo", "getPost"]),
 
@@ -30,6 +32,7 @@ export default {
       this.comments = !this.comments;
     },
   },
+
   mounted() {
     this.getInfo(this.$route.params.id);
     this.getPost(this.$route.params.id);
@@ -44,6 +47,11 @@ export default {
   background-color: #afcde7;
   @media screen and(max-width: 960px) {
     margin-top: 220px;
+  }
+
+  &-title {
+    margin: 0px 0px 20px 0px;
+    padding: 0px;
   }
 
   &-list {

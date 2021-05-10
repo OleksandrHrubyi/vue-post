@@ -32,6 +32,13 @@
             >
               <h3>Company: {{ item.company.name }}</h3>
               <p>Catchphrase: {{ item.company.catchPhrase }}</p>
+              <button
+                v-on:click="onClick"
+                class="modal-btn-close"
+                type="button"
+              >
+                X
+              </button>
             </div>
           </td>
         </tr>
@@ -50,7 +57,9 @@ export default {
       number: 1,
     };
   },
+
   computed: mapGetters(["getAllUsers"]),
+
   methods: {
     ...mapActions(["getUsers"]),
     onClick(e) {
@@ -58,6 +67,7 @@ export default {
       this.number = e.target.id;
     },
   },
+
   mounted() {
     this.getUsers();
   },
@@ -104,9 +114,14 @@ export default {
     background-color: #afcde7;
     font-size: 15px;
     cursor: pointer;
+    transition: 0.25s;
     @media screen and(max-width: 850px) {
       padding: 2px 5px;
       font-size: 6px;
+    }
+
+    &:hover {
+      background-color: #7fb7e9;
     }
   }
 }
@@ -144,10 +159,32 @@ td:first-child {
 
 .modal {
   position: absolute;
-  right: 100px;
+
+  right: 150px;
   padding: 30px;
   border: 1px solid #fff;
   border-radius: 5px;
   background-color: #afcde7;
+  @media screen and(max-width: 620px) {
+    top: 50%;
+    right: 25%;
+    margin: 0 auto;
+    width: 40%;
+  }
+
+  &-btn-close {
+    position: absolute;
+    top: -7px;
+    left: -7px;
+    padding: 8px 9px;
+    outline: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.25s;
+    &:hover {
+      background-color: rgb(238, 92, 92);
+    }
+  }
 }
 </style>

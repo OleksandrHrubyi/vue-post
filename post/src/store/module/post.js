@@ -2,9 +2,11 @@ import Vue from "vue";
 
 export default {
   actions: {
-    async getAll(cnt, limit) {
-      await Vue.axios
-        .get("https://jsonplaceholder.typicode.com/posts?_limit=" + limit)
+    getAll(cnt, page) {
+      Vue.axios
+        .get(
+          `https://jsonplaceholder.typicode.com/posts?_page=${page}&_limit=10`
+        )
         .then((response) => {
           cnt.commit("updatePosts", response.data);
         })
@@ -12,8 +14,9 @@ export default {
           console.log(error);
         });
     },
-    async getInfo(cnt, id) {
-      await Vue.axios
+
+    getInfo(cnt, id) {
+      Vue.axios
         .get(`https://jsonplaceholder.typicode.com/comments?userId=${id}`)
         .then((response) => {
           cnt.commit("infoPost", response.data);
@@ -23,8 +26,8 @@ export default {
         });
     },
 
-    async getPost(cnt, id) {
-      await Vue.axios
+    getPost(cnt, id) {
+      Vue.axios
         .get(`https://jsonplaceholder.typicode.com/posts/${id}`)
         .then((response) => {
           cnt.commit("onePost", response.data);
@@ -34,8 +37,8 @@ export default {
         });
     },
 
-    async getUsers(cnt) {
-      await Vue.axios
+    getUsers(cnt) {
+      Vue.axios
         .get(`https://jsonplaceholder.typicode.com/users`)
         .then((response) => {
           cnt.commit("allUsers", response.data);
@@ -44,11 +47,30 @@ export default {
           console.log(error);
         });
     },
+
+    createPost(cnt, title, body) {
+      Vue.axios
+        .post("https://jsonplaceholder.typicode.com/posts", {
+          method: "post",
+          data: {
+            title,
+            body,
+          },
+        })
+        .then((response) => {
+          cnt.commit("addPost", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
+
   mutations: {
     updatePosts(state, posts) {
-      state.posts = posts;
+      state.posts = [...state.posts, ...posts];
     },
+
     addPost(state, value) {
       state.posts.unshift(value);
     },
@@ -69,14 +91,16 @@ export default {
       state.allUsers = users;
     },
   },
+
   state: {
     posts: [],
-    users: [],
     newPost: [],
     userInfo: [],
     allUsers: [],
     onePost: {},
+    page: null,
   },
+
   getters: {
     validPost(state) {
       return state.posts.filter((el) => {
@@ -101,9 +125,11 @@ export default {
     getComments(state) {
       return state.userInfo;
     },
+
     getOnePost(state) {
       return state.onePost;
     },
+
     getAllUsers(state) {
       return state.allUsers;
     },

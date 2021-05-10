@@ -3,7 +3,6 @@
     <form class="adding-form" @submit.prevent="onSubmit">
       <label
         ><span class="title"> Title</span>
-
         <input
           class="adding-input"
           type="text"
@@ -31,8 +30,7 @@
 
 <script>
 import { mapMutations } from "vuex";
-import { createPost } from "../service";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -40,10 +38,12 @@ export default {
       body: "",
     };
   },
+  
   computed: mapGetters(["createOnePost"]),
 
   methods: {
     ...mapMutations(["newPost"]),
+    ...mapActions(["createPost"]),
     onSubmit() {
       this.newPost({
         title: this.title,
@@ -51,7 +51,7 @@ export default {
       });
 
       if (this.title && this.body) {
-        createPost(this.title, this.body);
+        this.createPost(this.title, this.body);
       }
 
       (this.title = ""), (this.body = "");
